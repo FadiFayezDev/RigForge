@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Inventory.Application.Common.Interfaces
+namespace CPUModule.Application.Abstractions
 {
     // 1. واجهة علامة فارغة تماماً (Marker)
     public interface IBaseCommand { }

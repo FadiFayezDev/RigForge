@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using CPUModule.Application.Abstractions;
 
 namespace CPUModule.Application.UseCases.CPUs
 {
@@ -64,5 +65,5 @@ namespace CPUModule.Application.UseCases.CPUs
         PCIeVersion PCIeVersion,
         int PCIeLanes
 
-    ) : Icomma<CPUProfileId>;
+    ) : ICommand<CPUProfileId>;
 }
