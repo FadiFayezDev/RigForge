@@ -153,7 +153,11 @@ namespace CPUModule.Domain.Entities
                 maxMemoryCapacityGB,
                 pcieLanes);
 
-            return new CPUProfile
+            var cores = CPUCores.Create(
+                performanceCores,
+                efficiencyCores);
+
+            var cpu = new CPUProfile
             {
                 Id = CPUProfileId.New(),
 
@@ -165,9 +169,7 @@ namespace CPUModule.Domain.Entities
                 ArchitectureId = architectureId,
                 ReleaseYear = releaseYear,
 
-                Cores = CPUCores.Create(
-                    performanceCores,
-                    efficiencyCores),
+                Cores = cores,
 
                 Threads = threads,
 
@@ -197,6 +199,24 @@ namespace CPUModule.Domain.Entities
                 PCIeVersion = pcieVersion,
                 PCIeLanes = pcieLanes
             };
+
+            // Domain invariants
+            if (cpu.CoolerIncluded && cpu.IncludedCoolerType is null)
+                throw new ArgumentException("Included cooler type must be provided when a cooler is included.");
+
+            if (!cpu.CoolerIncluded && cpu.IncludedCoolerType is not null)
+                throw new ArgumentException("Included cooler type must be null when no cooler is included.");
+
+            if (cpu.HasIntegratedGraphics && string.IsNullOrWhiteSpace(cpu.IntegratedGraphicsModel))
+                throw new ArgumentException("Integrated graphics model must be provided when CPU has integrated graphics.");
+
+            if (!cpu.HasIntegratedGraphics && !string.IsNullOrWhiteSpace(cpu.IntegratedGraphicsModel))
+                throw new ArgumentException("Integrated graphics model must be null when CPU has no integrated graphics.");
+
+            if (cpu.Threads < cores.TotalCores)
+                throw new ArgumentException("Threads cannot be less than total cores.");
+
+            return cpu;
         }
 
 
@@ -232,6 +252,9 @@ namespace CPUModule.Domain.Entities
             Cores.SetCores(
                 performanceCores,
                 efficiencyCores);
+
+            if (Threads < Cores.TotalCores)
+                throw new ArgumentException("Threads cannot be less than total cores after updating cores.");
         }
 
 
@@ -282,6 +305,9 @@ namespace CPUModule.Domain.Entities
                 throw new ArgumentOutOfRangeException(
                     nameof(tdpWatts));
 
+            if (coolerIncluded && coolerType is null)
+                throw new ArgumentException("Included cooler type must be provided when coolerIncluded is true.");
+
             if (!coolerIncluded)
                 coolerType = null;
 
@@ -295,14 +321,15 @@ namespace CPUModule.Domain.Entities
             bool hasIntegratedGraphics,
             string? graphicsModel = null)
         {
+            if (hasIntegratedGraphics && string.IsNullOrWhiteSpace(graphicsModel))
+                throw new ArgumentException("Graphics model must be provided when hasIntegratedGraphics is true.");
+
             if (!hasIntegratedGraphics)
                 graphicsModel = null;
 
-            HasIntegratedGraphics =
-                hasIntegratedGraphics;
+            HasIntegratedGraphics = hasIntegratedGraphics;
 
-            IntegratedGraphicsModel =
-                graphicsModel?.Trim();
+            IntegratedGraphicsModel = graphicsModel?.Trim();
         }
 
 
