@@ -1,0 +1,53 @@
+﻿using BuildingBlocks.Application.Common.Interfaces;
+using CPUModule.Infrastructure.Contexts;
+using CPUModule.Infrastructure.Repositories.Commands.Bases;
+using CPUModule.Infrastructure.Services;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Data;
+using CPUModule.Application;
+
+namespace CPUModule.Infrastructure
+{
+    public static class InfrastructureRegistration 
+    {
+        public static IServiceCollection AddInfrastructureRegistration(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
+
+
+            services.AddDbContext<CpuDbContext>(option =>
+            {
+                option.UseSqlServer(connectionString);
+            });
+
+            #region Dapper registration for IDbConnection
+            services.AddTransient<IDbConnection>(sp =>
+                new SqlConnection(connectionString)
+            );
+            #endregion
+
+            #region Application Services Registrations
+            services.AddCpuApplicationServices();
+            #endregion
+
+            #region Repository Registrations
+            services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+            #endregion
+
+            #region Query Repository Registrations
+            #endregion
+
+            #region Service Registrations
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            #endregion
+
+            // Add your infrastructure services here
+            return services;
+        }
+
+    }
+}

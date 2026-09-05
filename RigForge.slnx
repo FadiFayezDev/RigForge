@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BuildingBlocks/BuildingBlocks.csproj" />
+  </Folder>
+  <Folder Name="/src/Hosts/">
+    <Project Path="src/Hosts/RigForge.MVC/RigForge.MVC.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/CPUModule/">
+    <Project Path="src/Modules/CPUModule/CPUModule.Application/CPUModule.Application.csproj" />
+    <Project Path="src/Modules/CPUModule/CPUModule.Contracts/CPUModule.Contracts.csproj" />
+    <Project Path="src/Modules/CPUModule/CPUModule.Domain/CPUModule.Domain.csproj" />
+    <Project Path="src/Modules/CPUModule/CPUModule.Infrastructure/CPUModule.Infrastructure.csproj" />
+  </Folder>
+  <Project Path="test/test.csproj" />
+</Solution>
