@@ -2,7 +2,7 @@
 using CPUModule.Domain.Primitives.Identifiers;
 using Domain.Entities.CPU;
 
-namespace CPUModule.Application.Repositories
+namespace CPUModule.Application.Repositories.Commands
 {
     public interface ICPUArchitectureRepository : IRepository<CPUArchitecture, CPUArchitectureId>
     {
