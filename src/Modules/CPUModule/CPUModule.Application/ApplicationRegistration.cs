@@ -10,6 +10,7 @@ namespace CPUModule.Application
         {
             // Register application services here
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationRegistration).Assembly));
+            services.AddAutoMapper(cfg => cfg.AddMaps(typeof(ApplicationRegistration).Assembly));
            
             services.AddScoped<ICpuServices, CpuServices>();
             
