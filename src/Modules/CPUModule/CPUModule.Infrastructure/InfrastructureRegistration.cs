@@ -36,6 +36,8 @@ namespace CPUModule.Infrastructure
 
             #region Repository Registrations
             services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+            services.AddScoped<CPUModule.Application.Repositories.Commands.ICPUProfileRepository, CPUModule.Infrastructure.Repositories.Commands.CPUProfileRepository>();
+            services.AddScoped<CPUModule.Application.Repositories.Commands.ICPUArchitectureRepository, CPUModule.Infrastructure.Repositories.Commands.CPUArchitectureRepository>();
             #endregion
 
             #region Query Repository Registrations
@@ -45,7 +47,6 @@ namespace CPUModule.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
-            // Add your infrastructure services here
             return services;
         }
 

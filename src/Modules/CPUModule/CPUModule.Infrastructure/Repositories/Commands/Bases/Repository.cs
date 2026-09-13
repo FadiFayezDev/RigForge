@@ -18,6 +18,9 @@ namespace CPUModule.Infrastructure.Repositories.Commands.Bases
         public async Task<T?> GetByIdAsync(TKey id)
             => await _context.FirstOrDefaultAsync(e => EqualityComparer<TKey>.Default.Equals(e.Id, id));
 
+        public async Task<IEnumerable<T>> ListAllAsync()
+            => await _context.ToListAsync();
+
         public async Task AddAsync(T model)
         {
             _context.Add(model);
