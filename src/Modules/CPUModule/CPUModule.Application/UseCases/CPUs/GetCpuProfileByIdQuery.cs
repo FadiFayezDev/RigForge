@@ -19,11 +19,7 @@ namespace CPUModule.Application.UseCases.CPUs
 
         public async Task<CPUProfileDto?> Handle(GetCpuProfileByIdQuery request, CancellationToken cancellationToken)
         {
-            var cpu = await _queryRepository.GetCpuProfileByIdAsync(request.Id);
-            if (cpu is null)
-                throw new ArgumentException($"CPU profile with id {request.Id.Value} not found.");
-
-            return cpu;
+            return await _queryRepository.GetCpuProfileByIdAsync(request.Id);
         }
     }
 }

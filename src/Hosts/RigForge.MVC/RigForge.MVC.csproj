@@ -20,6 +20,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\CPUModule\CPUModule.Contracts\CPUModule.Contracts.csproj" />
     <ProjectReference Include="..\..\Modules\CPUModule\CPUModule.Infrastructure\CPUModule.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\SocketModule\SocketModule.Contracts\SocketModule.Contracts.csproj" />
+    <ProjectReference Include="..\..\Modules\SocketModule\SocketModule.Infrastructure\SocketModule.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

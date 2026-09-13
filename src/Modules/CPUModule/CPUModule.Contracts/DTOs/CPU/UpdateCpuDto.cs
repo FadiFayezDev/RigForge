@@ -3,36 +3,38 @@
 namespace CPUModule.Contracts.DTOs.CPU;
 
 /// <summary>
-/// Full CPU profile DTO returned to clients.
-/// Enum-like values are represented as strings and Ids as GUIDs to keep the contract simple.
+/// DTO used to update an existing CPU profile. Fields follow the same shape as RegisterCpuDto
+/// but include the Id of the profile to update.
 /// </summary>
-public record CPUProfileDto
-(
+public record UpdateCpuDto(
     Guid Id,
+
+    // Identity-ish
     string Name,
     decimal Price,
-    string Manufacturer,
-    string Family,
-    Guid ArchitectureId,
-    int ReleaseYear,
 
+    // Performance
     int PerformanceCores,
     int EfficiencyCores,
     int Threads,
     decimal BaseClockGHz,
     decimal BoostClockGHz,
 
+    // Cache
     int L2CacheMB,
     int L3CacheMB,
 
+    // Power & Cooling
     int TDPWatts,
     bool CoolerIncluded,
     string? IncludedCoolerType,
     bool SupportsOverclocking,
 
+    // Integrated Graphics
     bool HasIntegratedGraphics,
     string? IntegratedGraphicsModel,
 
+    // Compatibility
     Guid SocketId,
     string SupportedRamType,
     int MaxMemorySpeedMHz,

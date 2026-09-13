@@ -1,4 +1,5 @@
 using CPUModule.Infrastructure;
+using SocketModule.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddInfrastructureRegistration(builder.Configuration);
+builder.Services.AddSocketInfrastructureRegistration(builder.Configuration);
 
 var app = builder.Build();
 

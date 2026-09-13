@@ -12,5 +12,11 @@
     <Project Path="src/Modules/CPUModule/CPUModule.Domain/CPUModule.Domain.csproj" />
     <Project Path="src/Modules/CPUModule/CPUModule.Infrastructure/CPUModule.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/Modules/SocketModule/">
+    <Project Path="src/Modules/SocketModule/SocketModule.Application/SocketModule.Application.csproj" />
+    <Project Path="src/Modules/SocketModule/SocketModule.Contracts/SocketModule.Contracts.csproj" />
+    <Project Path="src/Modules/SocketModule/SocketModule.Domain/SocketModule.Domain.csproj" />
+    <Project Path="src/Modules/SocketModule/SocketModule.Infrastructure/SocketModule.Infrastructure.csproj" />
+  </Folder>
   <Project Path="test/test.csproj" />
 </Solution>

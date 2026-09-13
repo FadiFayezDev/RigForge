@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CPUModule.Application.UseCases.CPUs;
+using CPUModule.Application.UseCases.CPUArchitectures;
 using CPUModule.Contracts.DTOs.CPU;
+using CPUModule.Contracts.DTOs.CPUArchitectures;
 using CPUModule.Contracts.Services;
 using CPUModule.Domain.Enums;
 using CPUModule.Domain.Primitives.Identifiers;
@@ -65,6 +67,42 @@ namespace CPUModule.Application.Services
         public Task<bool> DeleteCpuProfileAsync(Guid id)
         {
             var command = new DeleteCpuCommand(id);
+            return _mediator.Send(command);
+        }
+        #endregion
+
+        #region CPU Architecture Retrieval
+        public Task<IEnumerable<CPUArchitectureDto>> GetAllCpuArchitecturesAsync()
+        {
+            var query = new GetAllCpuArchitecturesQuery();
+            return _mediator.Send(query);
+        }
+
+        public async Task<CPUArchitectureDto?> GetCpuArchitectureByIdAsync(Guid id)
+        {
+            var query = new GetCpuArchitectureByIdQuery(id);
+            return await _mediator.Send(query);
+        }
+        #endregion
+
+        #region CPU Architecture Management
+        public async Task<Guid> RegisterNewCpuArchitectureAsync(RegisterCpuArchitectureDto registerCpuArchitecture)
+        {
+            var command = _mapper.Map<RegisterNewCpuArchitectureCommand>(registerCpuArchitecture);
+            var id = await _mediator.Send(command);
+            return id.Value;
+        }
+
+        public async Task<bool> UpdateCpuArchitectureAsync(UpdateCpuArchitectureDto updateCpuArchitecture)
+        {
+            var command = _mapper.Map<UpdateCpuArchitectureCommand>(updateCpuArchitecture);
+            await _mediator.Send(command);
+            return true;
+        }
+
+        public Task<bool> DeleteCpuArchitectureAsync(Guid id)
+        {
+            var command = new DeleteCpuArchitectureCommand(id);
             return _mediator.Send(command);
         }
         #endregion

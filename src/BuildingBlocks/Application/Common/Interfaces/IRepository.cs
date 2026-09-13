@@ -7,5 +7,6 @@
         Task AddAsync(T model);
         Task UpdateAsync(T model);
         Task RemoveAsync(T model);
+        Task<IEnumerable<T>> ListAllAsync();
     }
 }

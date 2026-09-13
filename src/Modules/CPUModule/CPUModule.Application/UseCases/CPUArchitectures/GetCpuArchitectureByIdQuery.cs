@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace CPUModule.Application.UseCases.CPUArchitectures
 {
-    public sealed record GetCpuArchitectureByIdQuery(Guid Id) : IRequest<CPUArchitectureDto>;
+    public sealed record GetCpuArchitectureByIdQuery(Guid Id) : IRequest<CPUArchitectureDto?>;
 
-    public sealed class GetCpuArchitectureByIdQueryHandler : IRequestHandler<GetCpuArchitectureByIdQuery, CPUArchitectureDto>
+    public sealed class GetCpuArchitectureByIdQueryHandler : IRequestHandler<GetCpuArchitectureByIdQuery, CPUArchitectureDto?>
     {
         private readonly ICPUArchitectureQueryRepository _queryRepository;
 
@@ -19,14 +19,10 @@ namespace CPUModule.Application.UseCases.CPUArchitectures
             _queryRepository = queryRepository;
         }
 
-        public async Task<CPUArchitectureDto> Handle(GetCpuArchitectureByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CPUArchitectureDto?> Handle(GetCpuArchitectureByIdQuery request, CancellationToken cancellationToken)
         {
             var id = CPUModule.Domain.Primitives.Identifiers.CPUArchitectureId.FromGuid(request.Id);
-            var arch = await _queryRepository.GetCpuArchitectureByIdAsync(id);
-            if (arch is null)
-                throw new ArgumentException($"CPU architecture with id {request.Id} not found.");
-
-            return arch;
+            return await _queryRepository.GetCpuArchitectureByIdAsync(id);
         }
     }
 }
