@@ -41,6 +41,8 @@ namespace CPUModule.Infrastructure
             #endregion
 
             #region Query Repository Registrations
+            services.AddScoped<CPUModule.Application.Repositories.Queries.ICPUProfileQueryRepository, CPUModule.Infrastructure.Repositories.Queries.CPUProfileQueryRepository>();
+            services.AddScoped<CPUModule.Application.Repositories.Queries.ICPUArchitectureQueryRepository, CPUModule.Infrastructure.Repositories.Queries.CPUArchitectureQueryRepository>();
             #endregion
 
             #region Service Registrations
