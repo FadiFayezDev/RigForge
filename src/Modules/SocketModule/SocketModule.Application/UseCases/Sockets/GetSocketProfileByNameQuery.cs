@@ -1,6 +1,6 @@
+using MediatR;
 using SocketModule.Application.Repositories.Queries;
 using SocketModule.Contracts.DTOs;
-using MediatR;
 
 namespace SocketModule.Application.UseCases.Sockets
 {

@@ -1,9 +1,6 @@
 using CPUModule.Application.Abstractions;
 using CPUModule.Application.Repositories.Commands;
 using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CPUModule.Application.UseCases.CPUs
 {

@@ -1,9 +1,9 @@
+using MediatR;
 using SocketModule.Application.Abstractions;
 using SocketModule.Application.Repositories.Commands;
 using SocketModule.Domain.Entities;
 using SocketModule.Domain.Enums;
 using SocketModule.Domain.Primitives.Identifiers;
-using MediatR;
 
 namespace SocketModule.Application.UseCases.Sockets
 {
@@ -32,7 +32,6 @@ namespace SocketModule.Application.UseCases.Sockets
                 command.Manufacturer
             );
             await _socketProfileRepository.AddAsync(socketProfile);
-
             return socketProfile.Id;
         }
     }

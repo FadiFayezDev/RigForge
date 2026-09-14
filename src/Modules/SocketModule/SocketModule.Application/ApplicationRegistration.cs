@@ -1,6 +1,8 @@
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using SocketModule.Application.Behaviors;
 using SocketModule.Application.Services;
 using SocketModule.Contracts.Services;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace SocketModule.Application
 {
@@ -13,6 +15,9 @@ namespace SocketModule.Application
             services.AddAutoMapper(cfg => cfg.AddMaps(typeof(ApplicationRegistration).Assembly));
 
             services.AddScoped<ISocketServices, SocketServices>();
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
 
             return services;
         }

@@ -35,6 +35,12 @@ namespace CPUModule.Application.Services
             return _mediator.Send(query);
         }
 
+        public Task<IEnumerable<CPUProfileDto>> GetAllCpuProfilesAsync()
+        {
+            var query = new GetAllCpuProfilesQuery();
+            return _mediator.Send(query);
+        }
+
         public async Task<CPUProfileDto?> GetCpuProfileByIdAsync(Guid id)
         {
             var cpuId = CPUProfileId.FromGuid(id);

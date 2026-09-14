@@ -1,12 +1,6 @@
-using AutoMapper;
-using CPUModule.Application.Repositories.Commands;
 using CPUModule.Application.Repositories.Queries;
 using CPUModule.Contracts.DTOs.CPU;
 using MediatR;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CPUModule.Application.UseCases.CPUs
 {

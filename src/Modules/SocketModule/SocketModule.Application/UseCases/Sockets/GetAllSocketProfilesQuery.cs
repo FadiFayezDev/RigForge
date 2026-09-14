@@ -1,9 +1,6 @@
+using MediatR;
 using SocketModule.Application.Repositories.Queries;
 using SocketModule.Contracts.DTOs;
-using MediatR;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SocketModule.Application.UseCases.Sockets
 {
