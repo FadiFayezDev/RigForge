@@ -1,9 +1,9 @@
-﻿using BuildingBlocks.Domain.Bases;
-using CPUModule.Domain.Enums;
-using CPUModule.Domain.Primitives.Identifiers;
+using BuildingBlocks.Domain.Bases;
+using SocketModule.Domain.Enums;
+using SocketModule.Domain.Primitives.Identifiers;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Domain.Entities.Socket
+namespace SocketModule.Domain.Entities
 {
     public class SocketProfile : AggregateRoot<SocketProfileId>
     {
@@ -31,11 +31,18 @@ namespace Domain.Entities.Socket
                     "Socket name cannot be empty.",
                     nameof(name));
 
-            return new SocketProfile(name, manufacturer);
+            return new SocketProfile(name.Trim(), manufacturer);
         }
 
         public void UpdateName(string name)
-            => Name = name;
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException(
+                    "Socket name cannot be empty.",
+                    nameof(name));
+
+            Name = name.Trim();
+        }
 
         public void UpdateManufacturer(Manufacturer manufacturer)
             => Manufacturer = manufacturer;

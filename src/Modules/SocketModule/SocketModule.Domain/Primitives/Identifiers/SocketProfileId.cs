@@ -1,4 +1,4 @@
-﻿namespace CPUModule.Domain.Primitives.Identifiers;
+namespace SocketModule.Domain.Primitives.Identifiers;
 
 public readonly record struct SocketProfileId(Guid Value)
 {

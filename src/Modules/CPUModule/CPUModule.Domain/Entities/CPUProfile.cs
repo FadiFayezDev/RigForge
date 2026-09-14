@@ -2,6 +2,7 @@
 using CPUModule.Domain.Enums;
 using CPUModule.Domain.Primitives.Identifiers;
 using CPUModule.Domain.Primitives.ValueObjects;
+using CPUModule.Domain.Events;
 using Domain.Entities.CPU;
 
 namespace CPUModule.Domain.Entities
@@ -75,7 +76,12 @@ namespace CPUModule.Domain.Entities
         // Compatibility
         // =========================
 
-        public SocketProfileId SocketId { get; private set; }
+        /// <summary>
+        /// Reference to a socket owned by the Socket Module.
+        /// Stored as a plain Guid so the CPU Module only depends on
+        /// Socket.Contracts (Guid-based) and never on Socket Domain types.
+        /// </summary>
+        public Guid SocketId { get; private set; }
 
         public RamType SupportedRamType { get; private set; }
 
@@ -130,7 +136,7 @@ namespace CPUModule.Domain.Entities
             bool hasIntegratedGraphics,
             string? integratedGraphicsModel,
 
-            SocketProfileId socketId,
+            Guid socketId,
 
             RamType supportedRamType,
             int maxMemorySpeedMHz,
@@ -139,6 +145,11 @@ namespace CPUModule.Domain.Entities
             PCIeVersion pcieVersion,
             int pcieLanes)
         {
+            if (socketId == Guid.Empty)
+                throw new ArgumentException(
+                    "Socket id cannot be empty.",
+                    nameof(socketId));
+
             Validate(
                 name,
                 price,
@@ -153,7 +164,11 @@ namespace CPUModule.Domain.Entities
                 maxMemoryCapacityGB,
                 pcieLanes);
 
-            return new CPUProfile
+            var cores = CPUCores.Create(
+                performanceCores,
+                efficiencyCores);
+
+            var cpu = new CPUProfile
             {
                 Id = CPUProfileId.New(),
 
@@ -165,9 +180,7 @@ namespace CPUModule.Domain.Entities
                 ArchitectureId = architectureId,
                 ReleaseYear = releaseYear,
 
-                Cores = CPUCores.Create(
-                    performanceCores,
-                    efficiencyCores),
+                Cores = cores,
 
                 Threads = threads,
 
@@ -197,6 +210,27 @@ namespace CPUModule.Domain.Entities
                 PCIeVersion = pcieVersion,
                 PCIeLanes = pcieLanes
             };
+
+            // Domain invariants
+            if (cpu.CoolerIncluded && cpu.IncludedCoolerType is null)
+                throw new ArgumentException("Included cooler type must be provided when a cooler is included.");
+
+            if (!cpu.CoolerIncluded && cpu.IncludedCoolerType is not null)
+                throw new ArgumentException("Included cooler type must be null when no cooler is included.");
+
+            if (cpu.HasIntegratedGraphics && string.IsNullOrWhiteSpace(cpu.IntegratedGraphicsModel))
+                throw new ArgumentException("Integrated graphics model must be provided when CPU has integrated graphics.");
+
+            if (!cpu.HasIntegratedGraphics && !string.IsNullOrWhiteSpace(cpu.IntegratedGraphicsModel))
+                throw new ArgumentException("Integrated graphics model must be null when CPU has no integrated graphics.");
+
+            if (cpu.Threads < cores.TotalCores)
+                throw new ArgumentException("Threads cannot be less than total cores.");
+
+            // Domain event
+            cpu.AddDomainEvent(new CPUProfileCreatedEvent(cpu.Id, cpu.Name));
+
+            return cpu;
         }
 
 
@@ -212,6 +246,7 @@ namespace CPUModule.Domain.Entities
                     nameof(name));
 
             Name = name.Trim();
+            AddDomainEvent(new CPUProfileNameUpdatedEvent(Id, Name));
         }
 
 
@@ -222,6 +257,7 @@ namespace CPUModule.Domain.Entities
                     nameof(price));
 
             Price = price;
+            AddDomainEvent(new CPUProfilePriceUpdatedEvent(Id, Price));
         }
 
 
@@ -232,6 +268,27 @@ namespace CPUModule.Domain.Entities
             Cores.SetCores(
                 performanceCores,
                 efficiencyCores);
+
+            if (Threads < Cores.TotalCores)
+                throw new ArgumentException("Threads cannot be less than total cores after updating cores.");
+
+            AddDomainEvent(new CPUProfileCoresUpdatedEvent(
+                Id,
+                Cores.PerformanceCores,
+                Cores.EfficiencyCores,
+                Cores.TotalCores));
+        }
+
+        public void UpdateThreads(int threads)
+        {
+            if (threads <= 0)
+                throw new ArgumentOutOfRangeException(nameof(threads));
+
+            if (threads < Cores.TotalCores)
+                throw new ArgumentException("Threads cannot be less than total cores.");
+
+            Threads = threads;
+            AddDomainEvent(new CPUProfileThreadsUpdatedEvent(Id, Threads));
         }
 
 
@@ -253,6 +310,7 @@ namespace CPUModule.Domain.Entities
 
             BaseClockGHz = baseClockGHz;
             BoostClockGHz = boostClockGHz;
+            AddDomainEvent(new CPUProfileClockSpeedsUpdatedEvent(Id, BaseClockGHz, BoostClockGHz));
         }
 
 
@@ -270,6 +328,7 @@ namespace CPUModule.Domain.Entities
 
             L2CacheMB = l2CacheMB;
             L3CacheMB = l3CacheMB;
+            AddDomainEvent(new CPUProfileCacheUpdatedEvent(Id, L2CacheMB, L3CacheMB));
         }
 
 
@@ -282,12 +341,16 @@ namespace CPUModule.Domain.Entities
                 throw new ArgumentOutOfRangeException(
                     nameof(tdpWatts));
 
+            if (coolerIncluded && coolerType is null)
+                throw new ArgumentException("Included cooler type must be provided when coolerIncluded is true.");
+
             if (!coolerIncluded)
                 coolerType = null;
 
             TDPWatts = tdpWatts;
             CoolerIncluded = coolerIncluded;
             IncludedCoolerType = coolerType;
+            AddDomainEvent(new CPUProfileCoolingUpdatedEvent(Id, TDPWatts, CoolerIncluded, IncludedCoolerType));
         }
 
 
@@ -295,14 +358,16 @@ namespace CPUModule.Domain.Entities
             bool hasIntegratedGraphics,
             string? graphicsModel = null)
         {
+            if (hasIntegratedGraphics && string.IsNullOrWhiteSpace(graphicsModel))
+                throw new ArgumentException("Graphics model must be provided when hasIntegratedGraphics is true.");
+
             if (!hasIntegratedGraphics)
                 graphicsModel = null;
 
-            HasIntegratedGraphics =
-                hasIntegratedGraphics;
+            HasIntegratedGraphics = hasIntegratedGraphics;
 
-            IntegratedGraphicsModel =
-                graphicsModel?.Trim();
+            IntegratedGraphicsModel = graphicsModel?.Trim();
+            AddDomainEvent(new CPUProfileIntegratedGraphicsUpdatedEvent(Id, HasIntegratedGraphics, IntegratedGraphicsModel));
         }
 
 
@@ -322,6 +387,7 @@ namespace CPUModule.Domain.Entities
             SupportedRamType = ramType;
             MaxMemorySpeedMHz = maxMemorySpeedMHz;
             MaxMemoryCapacityGB = maxMemoryCapacityGB;
+            AddDomainEvent(new CPUProfileMemorySupportUpdatedEvent(Id, SupportedRamType, MaxMemorySpeedMHz, MaxMemoryCapacityGB));
         }
 
 
@@ -335,18 +401,26 @@ namespace CPUModule.Domain.Entities
 
             PCIeVersion = pcieVersion;
             PCIeLanes = pcieLanes;
+            AddDomainEvent(new CPUProfilePCIeUpdatedEvent(Id, PCIeVersion, PCIeLanes));
         }
 
 
-        public void UpdateSocket(SocketProfileId socketId)
+        public void UpdateSocket(Guid socketId)
         {
+            if (socketId == Guid.Empty)
+                throw new ArgumentException(
+                    "Socket id cannot be empty.",
+                    nameof(socketId));
+
             SocketId = socketId;
+            AddDomainEvent(new CPUProfileSocketUpdatedEvent(Id, SocketId));
         }
 
 
         public void UpdateOverclocking(bool supportsOverclocking)
         {
             SupportsOverclocking = supportsOverclocking;
+            AddDomainEvent(new CPUProfileOverclockingUpdatedEvent(Id, SupportsOverclocking));
         }
 
 

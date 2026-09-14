@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="Configurations\" />
     <Folder Include="Repositories\Commands\Bases\" />
-    <Folder Include="Repositories\Queries\" />
   </ItemGroup>
 
 </Project>

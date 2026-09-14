@@ -1,9 +1,9 @@
-using CPUModule.Domain.Primitives.Identifiers;
-using Domain.Entities.Socket;
+using SocketModule.Domain.Entities;
+using SocketModule.Domain.Primitives.Identifiers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CPUModule.Infrastructure.Configurations
+namespace SocketModule.Infrastructure.Configurations
 {
     public class SocketProfileConfiguration : IEntityTypeConfiguration<SocketProfile>
     {

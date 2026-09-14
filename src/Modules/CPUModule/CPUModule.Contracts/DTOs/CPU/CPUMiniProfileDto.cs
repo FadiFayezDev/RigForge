@@ -10,9 +10,11 @@ namespace CPUModule.Contracts.DTOs.CPU
         public string Name { get; set; } = default!;
         public int Cores { get; set; }
         public int Threads { get; set; }
-        public int BaseClockMHz { get; set; }
-        public int BoostClockMHz { get; set; }
+        // Use GHz decimals to match domain model units
+        public decimal BaseClockGHz { get; set; }
+        public decimal BoostClockGHz { get; set; }
         public decimal Price { get; set; }
+        public int TDP { get; set; }
 
     }
 }

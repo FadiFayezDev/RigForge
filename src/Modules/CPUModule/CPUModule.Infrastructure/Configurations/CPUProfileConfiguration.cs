@@ -1,6 +1,5 @@
 ﻿using CPUModule.Domain.Entities;
 using CPUModule.Domain.Primitives.Identifiers;
-using Domain.Entities.Socket;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -142,18 +141,12 @@ namespace CPUModule.Infrastructure.Configurations
             // Compatibility
             // =========================
 
+            // SocketId is a reference to a socket owned by the Socket Module.
+            // No FK/navigation: the Socket Module owns its persistence in an
+            // isolated DbContext/schema, and the CPU Module only stores the id.
             builder
                 .Property(cpu => cpu.SocketId)
-                .HasConversion(
-                    id => id.Value,
-                    id => SocketProfileId.FromGuid(id));
-
-            builder
-                .HasOne<SocketProfile>()
-                .WithMany()
-                .HasForeignKey(cpu => cpu.SocketId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .IsRequired();
 
             builder
                 .Property(cpu => cpu.SupportedRamType)

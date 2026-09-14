@@ -1,6 +1,6 @@
-﻿using MediatR;
+using MediatR;
 
-namespace Inventory.Application.Common.Interfaces
+namespace SocketModule.Application.Abstractions
 {
     // 1. واجهة علامة فارغة تماماً (Marker)
     public interface IBaseCommand { }
