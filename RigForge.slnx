@@ -18,5 +18,11 @@
     <Project Path="src/Modules/SocketModule/SocketModule.Domain/SocketModule.Domain.csproj" />
     <Project Path="src/Modules/SocketModule/SocketModule.Infrastructure/SocketModule.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/Modules/MotherboardModule/">
+    <Project Path="src/Modules/MotherboardModule/MotherboardModule.Application/MotherboardModule.Application.csproj" />
+    <Project Path="src/Modules/MotherboardModule/MotherboardModule.Contracts/MotherboardModule.Contracts.csproj" />
+    <Project Path="src/Modules/MotherboardModule/MotherboardModule.Domain/MotherboardModule.Domain.csproj" />
+    <Project Path="src/Modules/MotherboardModule/MotherboardModule.Infrastructure/MotherboardModule.Infrastructure.csproj" />
+  </Folder>
   <Project Path="test/test.csproj" />
 </Solution>

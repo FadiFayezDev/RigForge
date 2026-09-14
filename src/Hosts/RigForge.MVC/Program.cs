@@ -1,4 +1,5 @@
 using CPUModule.Infrastructure;
+using MotherboardModule.Infrastructure;
 using SocketModule.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,8 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddInfrastructureRegistration(builder.Configuration);
+builder.Services.AddCpuModuleInfrastructureRegistration(builder.Configuration);
 builder.Services.AddSocketInfrastructureRegistration(builder.Configuration);
+builder.Services.AddMotherboardInfrastructureRegistration(builder.Configuration);
 
 var app = builder.Build();
 
@@ -25,6 +27,11 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
