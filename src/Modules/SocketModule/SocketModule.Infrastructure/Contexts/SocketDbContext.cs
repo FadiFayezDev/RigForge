@@ -16,7 +16,7 @@ namespace SocketModule.Infrastructure.Contexts
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(SocketDbContext).Assembly);
-            modelBuilder.HasDefaultSchema("Socket");
+            modelBuilder.HasDefaultSchema("SKT");
         }
 
         public DbSet<SocketProfile> SocketProfiles { get; set; }
