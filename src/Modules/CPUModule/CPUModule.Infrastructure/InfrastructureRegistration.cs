@@ -1,4 +1,6 @@
 ﻿using BuildingBlocks.Application.Common.Interfaces;
+using CPUModule.Application;
+using CPUModule.Application.Common.Interfaces;
 using CPUModule.Infrastructure.Contexts;
 using CPUModule.Infrastructure.Repositories.Commands.Bases;
 using CPUModule.Infrastructure.Services;
@@ -7,13 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
-using CPUModule.Application;
 
 namespace CPUModule.Infrastructure
 {
     public static class InfrastructureRegistration 
     {
-        public static IServiceCollection AddInfrastructureRegistration(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCpuModuleInfrastructureRegistration(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
@@ -46,7 +47,7 @@ namespace CPUModule.Infrastructure
             #endregion
 
             #region Service Registrations
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICpuUnitOfWork, UnitOfWork>();
             #endregion
 
             return services;

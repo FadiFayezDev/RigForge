@@ -15,8 +15,11 @@ namespace CPUModule.Infrastructure.Repositories.Commands.Bases
             _context = context.Set<T>();
         }
 
+        // FindAsync applies the key's value conversion (strongly-typed IDs are
+        // stored as Guids) and reuses tracked entities — unlike an
+        // EqualityComparer-based predicate, which EF cannot translate.
         public async Task<T?> GetByIdAsync(TKey id)
-            => await _context.FirstOrDefaultAsync(e => EqualityComparer<TKey>.Default.Equals(e.Id, id));
+            => await _context.FindAsync(id);
 
         public async Task<IEnumerable<T>> ListAllAsync()
             => await _context.ToListAsync();

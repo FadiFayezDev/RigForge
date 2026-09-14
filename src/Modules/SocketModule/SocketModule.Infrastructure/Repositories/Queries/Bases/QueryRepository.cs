@@ -12,7 +12,7 @@ namespace SocketModule.Application.Repositories.Queries.Bases
 
         protected const string Schema = "Socket";
 
-        protected const string TableSocketProfiles = $"{Schema}.SocketProfile";
+        protected const string TableSocketProfiles = $"{Schema}.SocketProfiles";
 
         protected QueryRepository(IDbConnection connection /*, ICurrentUserContext? userContext = null*/ )
         {

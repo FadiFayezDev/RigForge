@@ -1,10 +1,11 @@
 using BuildingBlocks.Application.Common.Interfaces;
+using SocketModule.Application.Common.Interfaces;
 using SocketModule.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace SocketModule.Infrastructure.Services
 {
-    internal class UnitOfWork : IUnitOfWork, IDisposable
+    internal class UnitOfWork : ISocketUnitOfWork, IDisposable
     {
         private readonly SocketDbContext _context;
         private IDbContextTransaction? _transaction;

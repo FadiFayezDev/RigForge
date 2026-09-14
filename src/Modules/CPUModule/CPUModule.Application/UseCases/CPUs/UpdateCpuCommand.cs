@@ -1,12 +1,8 @@
 using CPUModule.Application.Abstractions;
-using CPUModule.Domain.Entities;
+using CPUModule.Application.Repositories.Commands;
 using CPUModule.Domain.Enums;
 using CPUModule.Domain.Primitives.Identifiers;
-using System;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
-using CPUModule.Application.Repositories.Commands;
 using SocketModule.Contracts.Services;
 
 namespace CPUModule.Application.UseCases.CPUs
@@ -89,7 +85,6 @@ namespace CPUModule.Application.UseCases.CPUs
             cpu.UpdatePCIe(command.PCIeVersion, command.PCIeLanes);
 
             await _cpuProfileRepository.UpdateAsync(cpu);
-
             return Unit.Value;
         }
     }

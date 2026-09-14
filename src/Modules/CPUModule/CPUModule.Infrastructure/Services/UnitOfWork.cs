@@ -1,10 +1,10 @@
-﻿using BuildingBlocks.Application.Common.Interfaces;
+﻿using CPUModule.Application.Common.Interfaces;
 using CPUModule.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CPUModule.Infrastructure.Services
 {
-    internal class UnitOfWork : IUnitOfWork, IDisposable
+    internal class UnitOfWork : ICpuUnitOfWork, IDisposable
     {
         private readonly CpuDbContext _context;
         private IDbContextTransaction? _transaction;

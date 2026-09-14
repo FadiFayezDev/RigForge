@@ -32,6 +32,14 @@ namespace CPUModule.Infrastructure.Repositories.Queries
             return result;
         }
 
+        public async Task<IEnumerable<CPUProfileDto>> GetAllCpuProfilesAsync()
+        {
+            var query = $"SELECT * FROM {TableCPUProfiles}";
+
+            var result = await _connection.QueryAsync<CPUProfileDto>(query);
+            return result;
+        }
+
         public async Task<IEnumerable<CPUMiniProfileDto>> GetCpuMinimalProfileByFilterAsync(string? name, int? cores, int? threads, decimal? baseClockGHz, decimal? boostClockGHz, decimal? price)
         {
             var queryBuilder = new StringBuilder();
@@ -83,7 +91,7 @@ namespace CPUModule.Infrastructure.Repositories.Queries
         public async Task<CPUProfileDto?> GetCpuProfileByIdAsync(CPUProfileId id)
         {
             var query = $"SELECT * FROM {TableCPUProfiles} WHERE Id = @Id";
-            var parameters = new { Id = id };
+            var parameters = new { Id = id.Value };
             return await _connection.QuerySingleOrDefaultAsync<CPUProfileDto?>(query, parameters);
         }
 

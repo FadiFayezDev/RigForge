@@ -1,9 +1,6 @@
+using MediatR;
 using SocketModule.Application.Abstractions;
 using SocketModule.Application.Repositories.Commands;
-using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SocketModule.Application.UseCases.Sockets
 {

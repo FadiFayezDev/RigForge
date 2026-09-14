@@ -1,10 +1,8 @@
 using CPUModule.Application.Abstractions;
 using CPUModule.Application.Repositories.Commands;
-using Domain.Entities.CPU;
 using CPUModule.Domain.Primitives.Identifiers;
+using Domain.Entities.CPU;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CPUModule.Application.UseCases.CPUArchitectures
 {

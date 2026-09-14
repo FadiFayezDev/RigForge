@@ -44,6 +44,11 @@ namespace CPUModule.Contracts.Services
         /// <returns></returns>
         Task<IEnumerable<CPUMiniProfileDto>> GetAllCpuMinimalProfilesAsync();
         /// <summary>
+        /// Retrieves all CPU profiles with full details.
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<CPUProfileDto>> GetAllCpuProfilesAsync();
+        /// <summary>
         /// Retrieves a CPU profile by its name.
         /// </summary>
         /// <param name="name"></param>

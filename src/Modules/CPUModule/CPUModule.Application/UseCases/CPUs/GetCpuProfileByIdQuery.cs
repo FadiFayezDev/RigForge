@@ -1,4 +1,3 @@
-using AutoMapper;
 using CPUModule.Application.Repositories.Queries;
 using CPUModule.Contracts.DTOs.CPU;
 using CPUModule.Domain.Primitives.Identifiers;

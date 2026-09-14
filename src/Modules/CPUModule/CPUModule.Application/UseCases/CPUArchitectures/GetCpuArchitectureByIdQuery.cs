@@ -1,10 +1,6 @@
-using AutoMapper;
 using CPUModule.Application.Repositories.Queries;
 using CPUModule.Contracts.DTOs.CPUArchitectures;
 using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CPUModule.Application.UseCases.CPUArchitectures
 {

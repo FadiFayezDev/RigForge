@@ -15,7 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\CPUModule.Contracts\CPUModule.Contracts.csproj" />
     <ProjectReference Include="..\CPUModule.Domain\CPUModule.Domain.csproj" />
-    <ProjectReference Include="..\..\SocketModule\SocketModule.Contracts\SocketModule.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

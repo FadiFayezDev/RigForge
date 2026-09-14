@@ -44,8 +44,8 @@ namespace SocketModule.Infrastructure
             // NOTE: intentionally NOT registered as the shared BuildingBlocks IUnitOfWork.
             // The shared IUnitOfWork is already claimed by the CPU Module; registering it here
             // again would override the CPU registration (last-registration-wins). The Socket
-            // UnitOfWork is registered as its own scoped service instead.
-            services.AddScoped<SocketModule.Infrastructure.Services.UnitOfWork>();
+            // UnitOfWork is exposed through its own ISocketUnitOfWork contract instead.
+            services.AddScoped<SocketModule.Application.Common.Interfaces.ISocketUnitOfWork, SocketModule.Infrastructure.Services.UnitOfWork>();
             #endregion
 
             // Add your infrastructure services here

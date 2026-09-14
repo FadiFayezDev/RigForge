@@ -138,11 +138,6 @@ namespace CPUModule.Application.UseCases.CPUs
                 command.PCIeLanes
             );
             await _cpuProfileRepository.AddAsync(cpuProfile);
-
-            //foreach(var domainEvent in cpuProfile.DomainEvents)
-            //{
-            //    Publi
-            //}
             return cpuProfile.Id;
         }
     }
